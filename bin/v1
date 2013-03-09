@@ -1,0 +1,103 @@
+#!/usr/bin/env coffee
+# vim:ft=coffee ts=2 sw=2 et :
+# -*- mode:coffee -*-
+
+Fs       = require 'fs'
+Path     = require 'path'
+Task = require("../src/version-one")
+_s = require('underscore.string')
+program = require('commander')
+Yaml = require('js-yaml') # parse the yaml config and members
+
+# get all members
+program
+  .command('members')
+  .description('get version one members')
+  .option('-r, --reload [false]', 'reload members',false)
+  .action (options) ->
+    Task.members (options.reload),(members)->
+      console.log members
+
+
+# tasks
+program
+  .command('tasks')
+  .description('get version one assets')
+  .option("-o, --owner [owner name]", "Owner of this task")
+  .option("-s, --status [status]", "Task status")
+  .action (options) ->
+    owner = options.owner || ""
+    status = options.status || ""
+    number = options.number || ""
+    Task.all (tasks)->
+      for t in tasks when _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
+        console.log t.toString()
+
+
+# task
+program
+  .command('task')
+  .description('get version one assets')
+  .option("-n, --number [task number]", "Task number")
+  .action (options) ->
+    Task.find options.number, (t)->
+      console.log t.toString()
+
+
+program.parse(process.argv)
+
+
+
+
+
+
+
+
+#(robot) ->
+  #robot.brain.data.v1_setting ||= { sprint: 12 }
+
+  #robot.respond /v1 members$/i, (msg) ->
+    #msg.send Util.inspect(MEMBERS, false, 4)
+
+  #robot.respond /v1 task (.*)$/i, (msg) ->
+    #taskid = _s.trim(msg.match[1])
+    #Task.find taskid,(t)->
+      #msg.send t.toString()
+
+  #robot.respond /v1 complete (.*)$/i, (msg) ->
+    #taskid = _s.trim(msg.match[1])
+    #msg.send "TODO call Task.complete('sdfsdf')"
+
+  #robot.respond /v1 update (.*)$/i, (msg) ->
+    #[taskid,attrName,attrValue...] = _s.clean(msg.match[1]).split(' ')
+    #Task.updateAttribute taskid,attrName,attrValue.join(' '),(res)->
+      #msg.send res
+
+  #robot.respond /v1 set(.*)?$/i, (msg) ->
+    #setting = _s.trim(msg.match[1])
+    #settingArray = setting.split('=')
+    #robot.brain.data.v1_setting[settingArray[0]] = settingArray[1]
+    #msg.send Util.inspect(robot.brain.data.v1_setting, false, 4)
+
+  #robot.respond /v1 config$/i, (msg) ->
+    #msg.send Util.inspect(robot.brain.data.v1_setting, false, 4)
+
+  ## search movie
+  #robot.respond /v1 tasks(.*)?$/i, (msg) ->
+    #if not robot.brain.data.v1_setting['sprint']
+      #msg.send "please set 'sprint' before check tasks."
+      #return
+    #resource = "Task"
+    #options = _s.trim(msg.match[1]).split(' ')
+    #owner = options[0]
+    #status = options[1]
+    #Task.all (tasks)->
+      #for t in tasks
+        #if status
+          #continue unless _s.include(t.status, status)
+        #continue unless t.team in ["Rapidus Front End Team"]
+        #continue unless t.sprint in ["MVP 1.0 Sprint #{robot.brain.data.v1_setting['sprint']}"]
+        #if owner.length > 0
+          #continue unless _s.include(t.member,owner)
+        #msg.send t.toString()
+

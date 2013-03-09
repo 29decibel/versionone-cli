@@ -1,0 +1,32 @@
+{
+  "name": "t-life",
+  "version": "0.0.1",
+  "description": "get every thing from command line",
+  "main": "index.js",
+  "dependencies": {
+    "coffee-script": "~> 1.6.1",
+    "commander": "1.1.1",
+    "scoped-http-client": "0.9.7",
+    "log": "1.3.0",
+    "underscore" : ">=1.3.0",
+    "underscore.string" : "2.3.0",
+    "soupselect" : "0.2.0",
+    "htmlparser" : "1.7.6",
+    "xml2js": "0.1.14",
+    "cheerio": "0.9.1",
+    "futures": ">=2.1.0",
+    "validator": "0.4.27",
+    "js-yaml": "2.0.3"
+  },
+  "bin": {
+    "tl": "./bin/v1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/29decibel/t-life.git"
+  },
+  "author": "29decibel",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "72212e14baaa3f0033f89760961d3a6dca09c5a3"
+}
