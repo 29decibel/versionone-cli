@@ -4,7 +4,9 @@
 
 Fs       = require 'fs'
 Path     = require 'path'
-Task = require("../src/version-one")
+models = require("../src/version-one")
+Task = models.Task
+Story = models.Story
 _s = require('underscore.string')
 program = require('commander')
 Yaml = require('js-yaml') # parse the yaml config and members
@@ -31,9 +33,11 @@ program
     status = options.status || ""
     number = options.number || ""
     sprint = options.sprint || ""
+    # task filter
+    filter = (t)->
+      _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase()) and _s.include(t.sprint,sprint)
     Task.all (tasks)->
-      for t in tasks when _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase()) and _s.include(t.sprint,sprint)
-        # console.log ''
+      for t in tasks when filter(t)
         console.log t.toString()
 
 
@@ -46,6 +50,15 @@ program
     Task.find options.number, (t)->
       console.log t.toString()
 
+# get all members
+program
+  .command('stories')
+  .description('get all stories')
+  .option('-r, --reload [false]', 'reload members',false)
+  .action (options) ->
+    Story.all (stories)->
+      for story in stories
+        console.log story.toString()
 
 program.parse(process.argv)
 

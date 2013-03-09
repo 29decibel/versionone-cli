@@ -10,7 +10,7 @@ Arguments
 AttributeDefinition
 Is the attribute token you wish to filter on
 Operator
-Supported operators include =, !=, <, >, <=, and >=
+### Supported operators include =, !=, <, >, <=, and >=
 Value
 Any number or string that you wish to match against, must be surrounded with single-quote marks. To use either single- or double-quote marks within the value, enter the character twice in succession.
 Logical

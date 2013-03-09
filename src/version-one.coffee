@@ -36,6 +36,41 @@ v1_options = {
 
 members_yaml = process.env['HOME'] + "/.v1_members.yaml"
 
+class Story
+  constructor:(asset)->
+    @asset = asset
+    @id = @asset['@']['id']
+    @name = getAttr(@asset, 'Name')
+    @number = getAttr(@asset, 'Number')
+    @sprint = getAttr(@asset, "Timebox.Name") || ""
+    @description = getAttr(@asset, "Description")?.replace(/(<([^>]+)>)/ig,"").replace('&nbsp','') || ''
+    @todo = getAttr(@asset, "ToDo") || '-'
+    @estimate = getAttr(@asset, "DetailEstimate") || '-'
+
+  @all: (callback)->
+    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Story?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
+      resultStr = ""
+      # append data to result
+      res.on "data", (data)->
+        resultStr += data.toString()
+      # yeah! got the result
+      res.on "end", (data) ->
+        parser = new xml2js.Parser()
+        parser.parseString resultStr, (err, result)->
+          tasks =  _.map result.Asset,(t)->
+            new Story(t)
+          callback(tasks)
+  toString:->
+    unless @id
+      return "Not Found..."
+    str = ""
+    str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
+    str += "#{blue}->#{reset} ESTI: " + @estimate + "\n"
+    str += "#{blue}->#{reset} TODO: #{@todo}\n"
+    str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
+    str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
+    str
+
 class Task
   constructor:(asset)->
     unless asset['@']['id']
@@ -153,7 +188,7 @@ class Task
             callback(members)
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Task", (res)->
+    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Task?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -180,4 +215,6 @@ class Task
     str
 
 
-module.exports = Task
+module.exports =
+  Story: Story
+  Task: Task
