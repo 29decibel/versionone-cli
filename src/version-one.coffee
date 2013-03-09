@@ -43,6 +43,7 @@ class Task
     @asset = asset
     @name = getAttr(@asset, 'Name')
     @number = getAttr(@asset, 'Number')
+    @sprint = getAttr(@asset, "Timebox.Name") || ""
     @id = @asset['@']['id']
     try
       @status_id = getRelation(@asset, 'Status')['@']['idref']
@@ -174,6 +175,7 @@ class Task
     str += "#{blue}->#{reset} #{@status}" + "\n"
     str += "#{blue}->#{reset} ESTI: " + @estimate + "\n"
     str += "#{blue}->#{reset} TODO: #{@todo}\n"
+    str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description}"  + "\n" + reset
     str
 

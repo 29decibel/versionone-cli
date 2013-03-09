@@ -25,12 +25,15 @@ program
   .description('get version one assets')
   .option("-o, --owner [owner name]", "Owner of this task")
   .option("-s, --status [status]", "Task status")
+  .option("-t, --sprint [sprint]", "Task status")
   .action (options) ->
     owner = options.owner || ""
     status = options.status || ""
     number = options.number || ""
+    sprint = options.sprint || ""
     Task.all (tasks)->
-      for t in tasks when _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
+      for t in tasks when _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase()) and _s.include(t.sprint,sprint)
+        # console.log ''
         console.log t.toString()
 
 
