@@ -94,7 +94,7 @@ class Task
     @number = getAttr(@asset, 'Number')
     @sprint = getAttr(@asset, "Timebox.Name") || ""
     @id = @asset['@']['id']
-    @parent_id = getRelation(@asset, "Parent")['@']['idref']?.split(":")[1]
+    @parent_id = _s.trim(getRelation(@asset, "Parent")['@']['idref']?.split(":")[1])
     try
       @status_id = getRelation(@asset, 'Status')['@']['idref']
     catch error

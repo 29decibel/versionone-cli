@@ -41,13 +41,13 @@ program
       tasks.filter(filter).map (a)->
         grouped_tasks[a.parent_id] ||= []
         grouped_tasks[a.parent_id].push a
-      for story_id,tasks of grouped_tasks
-        Story.find story_id, (s)->
-          console.log "------------------------------------------------------------------------------\n"
-          console.log s.toString()
-          for t in tasks
-            console.log t.toString()
-
+      for sid,ts of grouped_tasks
+        Story.find sid,(ps)->
+          result = Array(100).join("*") + "\n"
+          result += ps.toString()
+          for s in grouped_tasks[ps.id.split(":")[1]]
+            result += s.toString()
+          console.log result
 
 
 program
@@ -58,6 +58,7 @@ program
     Task.find options.number, (t)->
       console.log t.toString()
 
+
 program
   .command('stories')
   .description('get all stories')
@@ -66,6 +67,8 @@ program
     Story.all (stories)->
       for story in stories
         console.log story.toString()
+
+
 
 program
   .command('story')

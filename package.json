@@ -1,6 +1,6 @@
 {
   "name": "versionone-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "versionone cli",
   "main": "index.js",
   "dependencies": {
@@ -16,7 +16,8 @@
     "cheerio": "0.9.1",
     "futures": ">=2.1.0",
     "validator": "0.4.27",
-    "js-yaml": "2.0.3"
+    "js-yaml": "2.0.3",
+    "q": "0.9.1"
   },
   "bin": {
     "v1": "./bin/v1"
