@@ -7,7 +7,32 @@ export VERSION1_USERNAME=your_version_one_username
 export API_HOST=www.somehost.com
 ```
 
-#### run
+#### Install
+```bash
+npm install -g coffee-script
+npm install -g versionone-cli
+```
+
+#### Simple use
+```
+# setup members(first time with -r)
+v1 members -r
+
+# get stories
+v1 stories
+
+# get tasks
+v1 tasks -o mike -s complete
+
+# get one task
+v1 task -n 3322
+
+# get one story
+v1 story -n 3333
+
+```
+
+#### run in dev
 ```bash
 # get all tasks
 $ PATH="node_modules/.bin:$PATH" ./bin/v1 tasks
