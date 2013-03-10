@@ -50,7 +50,6 @@ program
 
 
 
-# task
 program
   .command('task')
   .description('get version one assets')
@@ -59,7 +58,6 @@ program
     Task.find options.number, (t)->
       console.log t.toString()
 
-# get all members
 program
   .command('stories')
   .description('get all stories')
@@ -68,6 +66,14 @@ program
     Story.all (stories)->
       for story in stories
         console.log story.toString()
+
+program
+  .command('story')
+  .description('get story with number')
+  .option('-n, --number [number]', 'get story by number')
+  .action (options) ->
+    Story.find options.number, (story)->
+      console.log story.toString()
 
 program.parse(process.argv)
 

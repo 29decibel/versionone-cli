@@ -79,11 +79,10 @@ class Story
   toString:->
     unless @id
       return "Not Found..."
-    str = ""
+    str = "\n"
     str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
     str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
-    str += "#{blue}->#{reset} TASK: #{@tasks}"  + "\n" + reset
     str
 
 class Task
@@ -219,7 +218,7 @@ class Task
   toString: =>
     unless @id
       return "Not Found..."
-    str = ""
+    str = "\n"
     str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
     str += "#{blue}->#{reset} #{@member}" + "\n"
     str += "#{blue}->#{reset} #{@status}" + "\n"
