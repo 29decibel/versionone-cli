@@ -10,6 +10,7 @@ Yaml = require('js-yaml') # parse the yaml config and members
 
 username = process.env.VERSION1_USERNAME
 password = process.env.VERSION1_PASSWORD
+api_host = process.env.API_HOST
 
 red   = '\u001b[31m'
 blue  = '\u001b[34m'
@@ -48,7 +49,7 @@ class Story
     @estimate = getAttr(@asset, "DetailEstimate") || '-'
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Story?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -104,7 +105,6 @@ class Task
     @todo = getAttr(@asset, "ToDo") || '-'
     @estimate = getAttr(@asset, "DetailEstimate") || '-'
     @description = getAttr(@asset, "Description")?.replace(/(<([^>]+)>)/ig,"").replace('&nbsp','') || ''
-    @href = "https://www14.v1host.com#{@asset['@']['href']}"
 
   getStatus: (status_id) =>
     map = {
@@ -150,7 +150,7 @@ class Task
 
 
   @find: (taskid, callback)->
-    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Task/#{taskid}", (res)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task/#{taskid}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -171,7 +171,7 @@ class Task
     else
       members = {}
       # cache memebers first
-      https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Member", (res)->
+      https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Member", (res)->
         result = ""
         # append data to result
         res.on "data", (data)->
@@ -188,7 +188,7 @@ class Task
             callback(members)
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@www14.v1host.com/acxiom1/VersionOne/rest-1.v1/Data/Task?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
