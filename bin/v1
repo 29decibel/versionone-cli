@@ -36,6 +36,7 @@ program
     # task filter
     filter = (t)->
       _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase()) and _s.include(t.sprint,sprint)
+    console.log Array(100).join("*")
     Task.all (tasks)->
       grouped_tasks = {}
       tasks.filter(filter).map (a)->
@@ -43,10 +44,11 @@ program
         grouped_tasks[a.parent_id].push a
       for sid,ts of grouped_tasks
         Story.find sid,(ps)->
-          result = Array(100).join("-") + "\n"
+          result = ""
           result += ps.toString()
           for s in grouped_tasks[ps.id.split(":")[1]]
             result += s.toString()
+          result += Array(100).join("-") + "\n"
           console.log result
 
 
