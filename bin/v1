@@ -4,9 +4,7 @@
 
 Fs       = require 'fs'
 Path     = require 'path'
-models = require("../src/version-one")
-Task = models.Task
-Story = models.Story
+{Task, Story} = require("../src/version-one")
 _s = require('underscore.string')
 program = require('commander')
 Yaml = require('js-yaml') # parse the yaml config and members
