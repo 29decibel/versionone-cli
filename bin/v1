@@ -43,7 +43,7 @@ program
         grouped_tasks[a.parent_id].push a
       for sid,ts of grouped_tasks
         Story.find sid,(ps)->
-          result = Array(100).join("*") + "\n"
+          result = Array(100).join("-") + "\n"
           result += ps.toString()
           for s in grouped_tasks[ps.id.split(":")[1]]
             result += s.toString()
