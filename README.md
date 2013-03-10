@@ -9,8 +9,8 @@ export API_HOST=www.somehost.com
 
 #### Install
 ```bash
-npm install -g coffee-script
-npm install -g versionone-cli
+$ npm install -g coffee-script
+$ npm install -g versionone-cli
 ```
 
 #### Simple use
