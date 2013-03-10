@@ -1,6 +1,6 @@
 {
   "name": "versionone-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "versionone cli",
   "main": "index.js",
   "dependencies": {
@@ -19,7 +19,7 @@
     "js-yaml": "2.0.3"
   },
   "bin": {
-    "tl": "./bin/v1"
+    "v1": "./bin/v1"
   },
   "repository": {
     "type": "git",
