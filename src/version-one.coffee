@@ -48,6 +48,19 @@ class Story
     @todo = getAttr(@asset, "ToDo") || '-'
     @estimate = getAttr(@asset, "DetailEstimate") || '-'
 
+  @find: (story_id, callback)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story/#{story_id}", (res)->
+      resultStr = ""
+      # append data to result
+      res.on "data", (data)->
+        resultStr += data.toString()
+      # yeah! got the result
+      res.on "end", (data) ->
+        parser = new xml2js.Parser()
+        parser.parseString resultStr, (err, result)->
+          callback(new Story(result))
+
+
   @all: (callback)->
     https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
       resultStr = ""
@@ -59,6 +72,8 @@ class Story
         parser = new xml2js.Parser()
         parser.parseString resultStr, (err, result)->
           tasks =  _.map result.Asset,(t)->
+            console.log "-----------------------------------"
+            console.log Util.inspect(t, false, 4)
             new Story(t)
           callback(tasks)
   toString:->
@@ -66,10 +81,9 @@ class Story
       return "Not Found..."
     str = ""
     str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
-    str += "#{blue}->#{reset} ESTI: " + @estimate + "\n"
-    str += "#{blue}->#{reset} TODO: #{@todo}\n"
     str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
+    str += "#{blue}->#{reset} TASK: #{@tasks}"  + "\n" + reset
     str
 
 class Task
@@ -81,6 +95,7 @@ class Task
     @number = getAttr(@asset, 'Number')
     @sprint = getAttr(@asset, "Timebox.Name") || ""
     @id = @asset['@']['id']
+    @parent_id = getRelation(@asset, "Parent")['@']['idref']?.split(":")[1]
     try
       @status_id = getRelation(@asset, 'Status')['@']['idref']
     catch error
