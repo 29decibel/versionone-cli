@@ -14,21 +14,21 @@ npm install -g versionone-cli
 ```
 
 #### Simple use
-```
+```bash
 # setup members(first time with -r)
-v1 members -r
+$ v1 members -r
 
 # get stories
-v1 stories
+$ v1 stories
 
 # get tasks
-v1 tasks -o mike -s complete
+$ v1 tasks -o mike -s complete
 
 # get one task
-v1 task -n 3322
+$ v1 task -n 3322
 
 # get one story
-v1 story -n 3333
+$ v1 story -n 3333
 
 ```
 
