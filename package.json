@@ -25,7 +25,7 @@
     "type": "git",
     "url": "git://github.com/29decibel/versionone-cli.git"
   },
-  "author": "29decibel",
+  "author": "29decibel <mike.d.1984@gmail.com>",
   "license": "BSD",
   "readmeFilename": "README.md",
   "gitHead": "72212e14baaa3f0033f89760961d3a6dca09c5a3"
