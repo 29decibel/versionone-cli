@@ -1,7 +1,7 @@
 {
-  "name": "t-life",
+  "name": "versionone-cli",
   "version": "0.0.1",
-  "description": "get every thing from command line",
+  "description": "versionone cli",
   "main": "index.js",
   "dependencies": {
     "coffee-script": "~> 1.6.1",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/29decibel/t-life.git"
+    "url": "git://github.com/29decibel/versionone-cli.git"
   },
   "author": "29decibel",
   "license": "BSD",
