@@ -9,6 +9,11 @@ _s = require('underscore.string')
 program = require('commander')
 Yaml = require('js-yaml') # parse the yaml config and members
 
+red   = '\u001b[31m'
+blue  = '\u001b[34m'
+yellow = '\u001b[33m'
+reset = '\u001b[0m'
+
 # get all members
 program
   .command('members')
@@ -78,60 +83,30 @@ program
     Story.find options.number, (story)->
       console.log story.toString()
 
+
+program
+  .command('update [asset]')
+  .description("update story or task")
+  .option('-n --number [task_number]', 'task number')
+  .action (asset, options) ->
+    # get the task
+    Task.find options.number, (task)->
+      console.log "Are you going to update this task:"
+      console.log task.toString()
+      attributes_list = ['ToDo', 'Description']
+      console.log "Choose which attribute you want to update: "
+      program.choose attributes_list, (i)->
+        console.log "You choose update #{attributes_list[i]}"
+        program.prompt "Update to: ", (value)->
+          program.confirm "Sure about update #{yellow}#{attributes_list[i]}#{reset} to #{red}#{value}#{reset}? ",(ok)->
+            if ok
+              console.log "Updating ..................."
+              Task.updateAttribute options.number, attributes_list[i], value, (result)->
+                console.log result
+            else
+              console.log "abort updating..."
+            process.stdin.destroy()
+
 program.parse(process.argv)
 
-
-
-
-
-
-
-
-#(robot) ->
-  #robot.brain.data.v1_setting ||= { sprint: 12 }
-
-  #robot.respond /v1 members$/i, (msg) ->
-    #msg.send Util.inspect(MEMBERS, false, 4)
-
-  #robot.respond /v1 task (.*)$/i, (msg) ->
-    #taskid = _s.trim(msg.match[1])
-    #Task.find taskid,(t)->
-      #msg.send t.toString()
-
-  #robot.respond /v1 complete (.*)$/i, (msg) ->
-    #taskid = _s.trim(msg.match[1])
-    #msg.send "TODO call Task.complete('sdfsdf')"
-
-  #robot.respond /v1 update (.*)$/i, (msg) ->
-    #[taskid,attrName,attrValue...] = _s.clean(msg.match[1]).split(' ')
-    #Task.updateAttribute taskid,attrName,attrValue.join(' '),(res)->
-      #msg.send res
-
-  #robot.respond /v1 set(.*)?$/i, (msg) ->
-    #setting = _s.trim(msg.match[1])
-    #settingArray = setting.split('=')
-    #robot.brain.data.v1_setting[settingArray[0]] = settingArray[1]
-    #msg.send Util.inspect(robot.brain.data.v1_setting, false, 4)
-
-  #robot.respond /v1 config$/i, (msg) ->
-    #msg.send Util.inspect(robot.brain.data.v1_setting, false, 4)
-
-  ## search movie
-  #robot.respond /v1 tasks(.*)?$/i, (msg) ->
-    #if not robot.brain.data.v1_setting['sprint']
-      #msg.send "please set 'sprint' before check tasks."
-      #return
-    #resource = "Task"
-    #options = _s.trim(msg.match[1]).split(' ')
-    #owner = options[0]
-    #status = options[1]
-    #Task.all (tasks)->
-      #for t in tasks
-        #if status
-          #continue unless _s.include(t.status, status)
-        #continue unless t.team in ["Rapidus Front End Team"]
-        #continue unless t.sprint in ["MVP 1.0 Sprint #{robot.brain.data.v1_setting['sprint']}"]
-        #if owner.length > 0
-          #continue unless _s.include(t.member,owner)
-        #msg.send t.toString()
 
