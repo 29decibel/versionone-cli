@@ -39,6 +39,20 @@ v1_options = {
 
 members_yaml = process.env['HOME'] + "/.v1_members.yaml"
 
+# load common config
+config_yaml = process.env['HOME'] + "/.v1_config.yaml"
+# default config
+V1Config =
+  where: ""
+# make sure the config exist
+unless Fs.existsSync(config_yaml)
+  Fs.writeFileSync config_yaml, Yaml.dump(V1Config)
+else
+  # laod the config
+  contents = Fs.readFileSync(config_yaml)
+  V1Config = Yaml.load(contents.toString())
+
+
 class Story
   constructor:(asset)->
     @asset = asset
@@ -64,7 +78,7 @@ class Story
 
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story?where=#{V1Config.where}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -232,7 +246,7 @@ class Task
             callback(members)
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task?where=Timebox.Name='MVP 1.0 Sprint 13'", (res)->
+    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task?where=#{V1Config.where}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
