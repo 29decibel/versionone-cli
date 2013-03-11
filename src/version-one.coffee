@@ -96,7 +96,7 @@ class Story
       return "Not Found..."
     str = "\n"
     str += "  #{underline}#{@number} #{@name}(#{@id})\n" + reset
-    str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
+    # str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
     str
 
@@ -268,7 +268,7 @@ class Task
     str += "#{blue}->#{reset} #{@status}" + "\n"
     str += "#{blue}->#{reset} ESTI: " + @estimate + "\n"
     str += "#{blue}->#{reset} TODO: #{@todo}\n"
-    str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
+    # str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description}"  + "\n" + reset
     str
 
