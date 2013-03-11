@@ -30,20 +30,19 @@ program
   .description('get version one assets')
   .option("-o, --owner [owner name]", "Owner of this task")
   .option("-s, --status [status]", "Task status")
-  .option("-t, --sprint [sprint]", "Task status")
   .action (options) ->
     owner = options.owner || ""
     status = options.status || ""
     number = options.number || ""
-    sprint = options.sprint || ""
     # task filter
     filter = (t)->
-      _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase()) and _s.include(t.sprint,sprint)
+      _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
     Task.all (tasks)->
       grouped_tasks = {}
       tasks.filter(filter).map (a)->
         grouped_tasks[a.parent_id] ||= []
         grouped_tasks[a.parent_id].push a
+      # load stories
       for sid,ts of grouped_tasks
         Story.find sid,(ps)->
           result = ""
