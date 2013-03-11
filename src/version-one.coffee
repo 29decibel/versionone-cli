@@ -16,6 +16,8 @@ red   = '\u001b[31m'
 blue  = '\u001b[34m'
 yellow = '\u001b[33m'
 reset = '\u001b[0m'
+italic = '\u001b[3m'
+underline = '\u001b[4m'
 
 getAttr = (asset, attrName) =>
   name = _.select asset.Attribute, (att)->
@@ -72,7 +74,6 @@ class Story
         parser = new xml2js.Parser()
         parser.parseString resultStr, (err, result)->
           tasks =  _.map result.Asset,(t)->
-            console.log "-----------------------------------"
             console.log Util.inspect(t, false, 4)
             new Story(t)
           callback(tasks)
@@ -80,7 +81,7 @@ class Story
     unless @id
       return "Not Found..."
     str = "\n"
-    str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
+    str += "  #{underline}#{@number} #{@name}(#{@id})\n" + reset
     str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
     str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
     str
