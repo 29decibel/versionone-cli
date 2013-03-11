@@ -30,6 +30,9 @@ $ v1 task -n 3322
 # get one story
 $ v1 story -n 3333
 
+# update task
+$ v1 update task -n 4444
+
 ```
 
 #### run in dev
