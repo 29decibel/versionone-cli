@@ -120,21 +120,41 @@ class Task
     @estimate = getAttr(@asset, "DetailEstimate") || '-'
     @description = getAttr(@asset, "Description")?.replace(/(<([^>]+)>)/ig,"").replace('&nbsp','') || ''
 
+  @statusMap:
+    "TaskStatus:123": "In Progress"
+    "TaskStatus:125": "Complete"
+    "TaskStatus:37514": "Ready for Test"
+    "TaskStatus:37513": "Not Started"
+
   getStatus: (status_id) =>
+    Task.statusMap[status_id]
+
+  @statusId: (statusName)->
     map = {
-      "TaskStatus:123": "In Progress"
-      "TaskStatus:125": "Complete"
-      "TaskStatus:37514": "Ready for Test"
-      "TaskStatus:37513": "Not Started"
+      "In Progress"    : "TaskStatus:123"
+      "Complete"       : "TaskStatus:125"
+      "Ready for Test" : "TaskStatus:37514"
+      "Not Started"    : "TaskStatus:37513"
     }
-    map[status_id]
+    map[statusName]
 
 
-  # update task hours
+  # update attributes
   @updateAttribute: (taskid,attrName,attrValue,callback)->
     body = """
       <Asset>
         <Attribute name="#{attrName}" act="set">#{attrValue}</Attribute>
+      </Asset>
+    """
+    @post(taskid,body,callback)
+
+  # update relation
+  @updateRelation: (taskid, relationName, value, callback)->
+    body = """
+      <Asset>
+        <Relation name="#{relationName}" act="set">
+          <Asset idref="#{value}" />
+        </Relation>
       </Asset>
     """
     @post(taskid,body,callback)

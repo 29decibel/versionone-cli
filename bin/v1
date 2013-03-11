@@ -93,7 +93,7 @@ program
     Task.find options.number, (task)->
       console.log "Are you going to update this task:"
       console.log task.toString()
-      attributes_list = ['ToDo', 'Description']
+      attributes_list = ['ToDo', 'Description','Status']
       console.log "Choose which attribute you want to update: "
       program.choose attributes_list, (i)->
         console.log "You choose update #{attributes_list[i]}"
@@ -101,8 +101,13 @@ program
           program.confirm "Sure about update #{yellow}#{attributes_list[i]}#{reset} to #{red}#{value}#{reset}? ",(ok)->
             if ok
               console.log "Updating ..................."
-              Task.updateAttribute options.number, attributes_list[i], value, (result)->
-                console.log result
+              if attributes_list[i] == 'Status'
+                # update relation
+                Task.updateRelation options.number, attributes_list[i],Task.statusId(value), (result)->
+                  console.log result
+              else
+                Task.updateAttribute options.number, attributes_list[i], value, (result)->
+                  console.log result
             else
               console.log "abort updating..."
             process.stdin.destroy()
