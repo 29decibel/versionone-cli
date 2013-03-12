@@ -7,6 +7,7 @@ https = require('https')
 Util = require "util"
 Fs       = require 'fs'
 Yaml = require('js-yaml') # parse the yaml config and members
+Url = require('url')
 
 members_yaml = process.env['HOME'] + "/.v1_members.yaml"
 
@@ -43,14 +44,14 @@ getRelation = (asset, relationName) =>
     att['@']?.name == relationName
   name[0].Asset
 
-v1_options = {
-  hostname: "www14.v1host.com"
+
+https_req_options = {
+  hostname: Url.parse("https://" + V1Config.api_host).host
   port: 443
   auth: "#{V1Config.username}:#{V1Config.password}"
   path: '/'
   method: 'GET'
 }
-
 
 
 class Story
@@ -91,6 +92,7 @@ class Story
             console.log Util.inspect(t, false, 4)
             new Story(t)
           callback(tasks)
+
   toString:->
     unless @id
       return "Not Found..."
@@ -175,20 +177,10 @@ class Task
     @post(taskid,body,callback)
 
 
-  # make task complete
-  @complete: (taskid,callback)->
-    body = """
-        <Asset>
-          <Relation name="Status" act="set">
-            <Asset href="/acxiom1/VersionOne/rest-1.v1/Data/TaskStatus/125" idref="TaskStatus:125"/>
-          </Relation>
-        </Asset>
-    """
-    @post(taskid,body,callback)
-
   # make the post request
   @post: (taskid,body,callback)->
-    ops = _.extend(v1_options, { path:"/acxiom1/VersionOne/rest-1.v1/Data/Task/#{taskid}", method: 'POST' })
+    url = "https://#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Task/#{taskid}"
+    ops = _.extend(https_req_options, { path:Url.parse(url).path, method: 'POST' })
     req = https.request ops, (response)->
       result = ""
       response.on 'data', (chunk)->
@@ -200,6 +192,7 @@ class Task
     req.end()
 
   @parseUpdateResult: (result, callback)->
+    # sample response
     # <Error href="/acxiom1/VersionOne/rest-1.v1/Data/Task/95751"><Message>Server Error</Message><Exception class="VersionOne.MetaException"><Message>Unknown AttributeDefinition: Task.Todo</Message></Exception></Error>
     # <?xml version="1.0" encoding="UTF-8"?><Asset href="/acxiom1/VersionOne/rest-1.v1/Data/Task/95751/263864" id="Task:95751:263864"><Attribute name="ToDo">20</Attribute></Asset>
     parser = new xml2js.Parser()
