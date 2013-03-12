@@ -27,9 +27,9 @@ program
 # tasks
 program
   .command('tasks')
-  .description('get version one assets')
+  .description('get tasks available in this sprint')
   .option("-o, --owner [owner name]", "Owner of this task")
-  .option("-s, --status [status]", "Task status")
+  .option("-s, --status [status]", "Task status, using except if you just want to exclude some tasks with that status")
   .action (options) ->
     owner = options.owner || ""
     status = options.status || ""
@@ -57,7 +57,7 @@ program
 
 program
   .command('task')
-  .description('get version one assets')
+  .description('get one task with number -n specify')
   .option("-n, --number [task number]", "Task number")
   .action (options) ->
     Task.find options.number, (t)->
