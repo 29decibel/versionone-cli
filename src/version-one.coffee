@@ -8,9 +8,23 @@ Util = require "util"
 Fs       = require 'fs'
 Yaml = require('js-yaml') # parse the yaml config and members
 
-username = process.env.VERSION1_USERNAME
-password = process.env.VERSION1_PASSWORD
-api_host = process.env.API_HOST
+members_yaml = process.env['HOME'] + "/.v1_members.yaml"
+
+# load common config
+config_yaml = process.env['HOME'] + "/.v1_config.yaml"
+# default config
+V1Config =
+  where: ""
+  username: ""
+  password: ""
+  api_host: ""
+# make sure the config exist
+unless Fs.existsSync(config_yaml)
+  Fs.writeFileSync config_yaml, Yaml.dump(V1Config)
+else
+  # laod the config
+  contents = Fs.readFileSync(config_yaml)
+  V1Config = Yaml.load(contents.toString())
 
 red   = '\u001b[31m'
 blue  = '\u001b[34m'
@@ -32,25 +46,11 @@ getRelation = (asset, relationName) =>
 v1_options = {
   hostname: "www14.v1host.com"
   port: 443
-  auth: "#{username}:#{password}"
+  auth: "#{V1Config.username}:#{V1Config.password}"
   path: '/'
   method: 'GET'
 }
 
-members_yaml = process.env['HOME'] + "/.v1_members.yaml"
-
-# load common config
-config_yaml = process.env['HOME'] + "/.v1_config.yaml"
-# default config
-V1Config =
-  where: ""
-# make sure the config exist
-unless Fs.existsSync(config_yaml)
-  Fs.writeFileSync config_yaml, Yaml.dump(V1Config)
-else
-  # laod the config
-  contents = Fs.readFileSync(config_yaml)
-  V1Config = Yaml.load(contents.toString())
 
 
 class Story
@@ -65,7 +65,7 @@ class Story
     @estimate = getAttr(@asset, "DetailEstimate") || '-'
 
   @find: (story_id, callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story/#{story_id}", (res)->
+    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Story/#{story_id}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -78,7 +78,7 @@ class Story
 
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Story?where=#{V1Config.where}", (res)->
+    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Story?where=#{V1Config.where}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -208,7 +208,7 @@ class Task
 
 
   @find: (taskid, callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task/#{taskid}", (res)->
+    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Task/#{taskid}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
@@ -229,7 +229,7 @@ class Task
     else
       members = {}
       # cache memebers first
-      https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Member", (res)->
+      https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Member", (res)->
         result = ""
         # append data to result
         res.on "data", (data)->
@@ -246,7 +246,7 @@ class Task
             callback(members)
 
   @all: (callback)->
-    https.get "https://#{username}:#{password}@#{api_host}/VersionOne/rest-1.v1/Data/Task?where=#{V1Config.where}", (res)->
+    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Task?where=#{V1Config.where}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
