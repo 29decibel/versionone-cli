@@ -36,7 +36,10 @@ program
     number = options.number || ""
     # task filter
     filter = (t)->
-      _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
+      if status.slice(0,6) == "except"
+        _s.include(t.member.toLowerCase(),owner.toLowerCase()) and !_s.include(t.status.toLowerCase(),status.slice(6).trim().toLowerCase())
+      else
+        _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
     Task.all (tasks)->
       grouped_tasks = {}
       tasks.filter(filter).map (a)->
