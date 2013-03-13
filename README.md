@@ -1,11 +1,5 @@
 ### VersionOne Cli
 ----
-#### ENV
-```bash
-export VERSION1_PASSWORD=your_version_one_password
-export VERSION1_USERNAME=your_version_one_username
-export API_HOST=www.somehost.com
-```
 
 #### Install
 ```bash
@@ -15,7 +9,10 @@ $ npm install -g versionone-cli
 
 #### Simple use
 ```bash
-# setup members(first time with -r)
+# set up
+$ v1 setup
+
+# load members
 $ v1 members -r
 
 # get stories
