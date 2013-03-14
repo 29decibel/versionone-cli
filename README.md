@@ -1,7 +1,7 @@
 ### VersionOne Cli
 ----
 
-![versionone-cli screenshot](http://imgur.com/RyRKmg5)
+![versionone-cli screenshot](http://i.imgur.com/RyRKmg5.png?1)
 
 #### Install
 ```bash
