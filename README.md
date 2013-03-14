@@ -1,6 +1,8 @@
 ### VersionOne Cli
 ----
 
+![versionone-cli screenshot](http://imgur.com/RyRKmg5)
+
 #### Install
 ```bash
 $ npm install -g coffee-script
