@@ -8,6 +8,8 @@ Util = require "util"
 Fs       = require 'fs'
 Yaml = require('js-yaml') # parse the yaml config and members
 Url = require('url')
+# make the output colorful
+Colors = require('colors')
 
 members_yaml = process.env['HOME'] + "/.v1_members.yaml"
 
@@ -27,12 +29,6 @@ else
   contents = Fs.readFileSync(config_yaml)
   V1Config = Yaml.load(contents.toString())
 
-red   = '\u001b[31m'
-blue  = '\u001b[34m'
-yellow = '\u001b[33m'
-reset = '\u001b[0m'
-italic = '\u001b[3m'
-underline = '\u001b[4m'
 
 getAttr = (asset, attrName) =>
   name = _.select asset.Attribute, (att)->
@@ -97,9 +93,9 @@ class Story
     unless @id
       return "Not Found..."
     str = "\n"
-    str += "  #{underline}#{@number} #{@name}(#{@id})\n" + reset
+    str += "  ".white + "#{@number} #{@name}(#{@id})\n".cyan.underline
     # str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
-    str += "#{blue}->#{reset} DESC: #{@description[0..100]}"  + "\n" + reset
+    str += "->".blue + " DESC: #{@description[0..100]}"  + "\n"
     str
 
 class Task
@@ -133,8 +129,9 @@ class Task
     @team = getAttr(@asset, "Team.Name")
     @sprint = getAttr(@asset, "Timebox.Name")
     @scope = getAttr(@asset, "Scope.Name")
-    @todo = getAttr(@asset, "ToDo") || '-'
-    @estimate = getAttr(@asset, "DetailEstimate") || '-'
+    @todo = parseInt(getAttr(@asset, "ToDo")) || 0
+    @estimate = parseInt(getAttr(@asset, "DetailEstimate")) || 0
+    @done = @estimate - @todo
     @description = getAttr(@asset, "Description")?.replace(/(<([^>]+)>)/ig,"").replace('&nbsp','') || ''
 
   @statusMap:
@@ -256,13 +253,18 @@ class Task
     unless @id
       return "Not Found..."
     str = "\n"
-    str += yellow + "  #{@number} #{@name}(#{@id})\n" + reset
-    str += "#{blue}->#{reset} #{@member}" + "\n"
-    str += "#{blue}->#{reset} #{@status}" + "\n"
-    str += "#{blue}->#{reset} ESTI: " + @estimate + "\n"
-    str += "#{blue}->#{reset} TODO: #{@todo}\n"
-    # str += "#{blue}->#{reset} SPRT: #{@sprint}\n"
-    str += "#{blue}->#{reset} DESC: #{@description}"  + "\n" + reset
+    str += "     #{@number} #{@name}(#{@id})\n".yellow
+    str += "   -> ".blue + "#{@member}" + "\n"
+    str += "   -> ".blue + "#{@status}" + "\n"
+    str += "   -> ".blue + "ESTI: " + @estimate + "\n"
+    str += "   -> ".blue + "TODO: #{@todo}\n"
+    str += "   -> ".blue + "["
+    if @done > 0
+      str += Array(@done).join("+").green
+    if @todo > 0
+      str += Array(@todo).join("-").red
+    str += "]\n"
+    str += "   ->".blue + " DESC: #{@description}"  + "\n"
     str
 
 

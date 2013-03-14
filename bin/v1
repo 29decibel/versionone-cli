@@ -26,13 +26,17 @@ program
       password: ""
       api_host: ""
     }
-    program.prompt 'username: ', (username)->
+    console.log "Tell me your version one username? ".blue
+    program.prompt 'Username: ', (username)->
       config.username = username
-      program.prompt 'password: ', (password)->
+      program.password 'Password: ', (password)->
         config.password = password
-        program.prompt 'current sprint name: ', (sprint)->
+        console.log "What's the full name of current sprint? ".blue
+        program.prompt 'Current sprint name(full name): ', (sprint)->
           config.where = "Timebox.Name='#{sprint}'"
-          program.prompt 'version one api host: ', (api_host)->
+          console.log "Almost there, tell me the api host? ".blue
+          console.log "(for example, the API Host should be red part of your version one address is: https://" + "www14.v1host.com/company1".red + "/Default.aspx?menu=TaskBoardPage)"
+          program.prompt 'API Host: ', (api_host)->
             config.api_host = api_host
             # write to config
             Fs.writeFileSync config_yaml, Yaml.dump(config)
@@ -125,7 +129,7 @@ program
       program.choose attributes_list, (i)->
         console.log "You choose update #{attributes_list[i]}"
         program.prompt "Update to: ", (value)->
-          program.confirm "Sure about update #{yellow}#{attributes_list[i]}#{reset} to #{red}#{value}#{reset}? ",(ok)->
+          program.confirm "Sure about update #{attributes_list[i].yellow} to #{value.red}? ",(ok)->
             if ok
               console.log "Updating ..................."
               if attributes_list[i] == 'Status'
