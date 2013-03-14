@@ -60,12 +60,19 @@ program
     owner = options.owner || ""
     status = options.status || ""
     number = options.number || ""
+    # check owners function
+    check_owners = (t, owners)->
+      check_result = true
+      for o in owners.split(",")
+        check_result = _s.include(t.member.toLowerCase(),o.toLowerCase())
+        return check_result if check_result
+      check_result
     # task filter
     filter = (t)->
       if status.slice(0,6) == "except"
-        _s.include(t.member.toLowerCase(),owner.toLowerCase()) and !_s.include(t.status.toLowerCase(),status.slice(6).trim().toLowerCase())
+        check_owners(t, owner) and !_s.include(t.status.toLowerCase(),status.slice(6).trim().toLowerCase())
       else
-        _s.include(t.member.toLowerCase(),owner.toLowerCase()) and _s.include(t.status.toLowerCase(),status.toLowerCase())
+        check_owners(t, owner) and _s.include(t.status.toLowerCase(),status.toLowerCase())
     Task.all (tasks)->
       grouped_tasks = {}
       tasks.filter(filter).map (a)->
