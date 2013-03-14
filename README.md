@@ -1,4 +1,5 @@
 ### VersionOne Cli
+[![endorse](http://api.coderwall.com/29decibel/endorsecount.png)](http://coderwall.com/29decibel)
 ----
 
 ![versionone-cli screenshot](http://i.imgur.com/RyRKmg5.png?1)
