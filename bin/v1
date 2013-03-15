@@ -55,7 +55,7 @@ program
   .command('tasks')
   .description('get tasks available in this sprint')
   .option("-o, --owner [owner name]", "Owner of this task")
-  .option("-s, --status [status]", "Task status, using except if you just want to exclude some tasks with that status")
+  .option("-s, --status [status]", "Task status, using '~' at the first if you just want to exclude some tasks with that status")
   .action (options) ->
     owner = options.owner || ""
     status = options.status || ""
@@ -69,8 +69,8 @@ program
       check_result
     # task filter
     filter = (t)->
-      if status.slice(0,6) == "except"
-        check_owners(t, owner) and !_s.include(t.status.toLowerCase(),status.slice(6).trim().toLowerCase())
+      if status.slice(0,1) == "~"
+        check_owners(t, owner) and !_s.include(t.status.toLowerCase(),status.slice(1).trim().toLowerCase())
       else
         check_owners(t, owner) and _s.include(t.status.toLowerCase(),status.toLowerCase())
     Task.all (tasks)->
