@@ -10,6 +10,9 @@ Yaml = require('js-yaml') # parse the yaml config and members
 Url = require('url')
 # make the output colorful
 Colors = require('colors')
+# for percentage process bar
+multimeter = require('multimeter')
+multi = multimeter(process)
 
 members_yaml = process.env['HOME'] + "/.v1_members.yaml"
 
@@ -250,6 +253,8 @@ class Task
           callback(tasks)
 
   toString: =>
+    # multi.drop (bar)->
+    #   bar.percent(@done*100/@estimate)
     unless @id
       return "Not Found..."
     str = "\n"
@@ -266,6 +271,7 @@ class Task
     str += "]\n"
     str += "   ->".blue + " DESC: #{@description}"  + "\n"
     str
+
 
 
 module.exports =
