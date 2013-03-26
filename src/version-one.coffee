@@ -192,9 +192,6 @@ class Task
     req.end()
 
   @parseUpdateResult: (result, callback)->
-    # sample response
-    # <Error href="/acxiom1/VersionOne/rest-1.v1/Data/Task/95751"><Message>Server Error</Message><Exception class="VersionOne.MetaException"><Message>Unknown AttributeDefinition: Task.Todo</Message></Exception></Error>
-    # <?xml version="1.0" encoding="UTF-8"?><Asset href="/acxiom1/VersionOne/rest-1.v1/Data/Task/95751/263864" id="Task:95751:263864"><Attribute name="ToDo">20</Attribute></Asset>
     parser = new xml2js.Parser()
     parser.parseString result, (err, result)->
       callback(result.Exception?.Message || "Updated success!")
