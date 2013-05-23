@@ -235,8 +235,8 @@ class Task
               console.log ("can not cache members: #{err}") if err
             callback(members)
 
-  @all: (callback)->
-    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Task?where=#{V1Config.where}", (res)->
+  @all: (whereClause, callback)->
+    https.get "https://#{V1Config.username}:#{V1Config.password}@#{V1Config.api_host}/VersionOne/rest-1.v1/Data/Task?where=#{whereClause}", (res)->
       resultStr = ""
       # append data to result
       res.on "data", (data)->
